@@ -1,0 +1,47 @@
+<script>
+
+    const username = document.querySelector('#username');
+    const saveScoreBtn = document.querySelector('#saveScoreBtn');
+    const finalScore = document.querySelector('#finalScore');
+    const scoreForm = document.querySelector('#scoreForm');
+    const mostRecentScore = JSON.parse(localStorage.getItem('mostRecentScore'));
+
+    finalScore.innerText = mostRecentScore;
+
+    username.addEventListener('keyup', () => {
+        saveScoreBtn.disabled = !username.value;
+    });
+
+    scoreForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveHighScore(2); // Pass the quiz number (2) to the saveHighScore function
+    });
+
+    function saveHighScore(quizNumber) {
+        const score = mostRecentScore;
+        const name = username.value;
+
+        if (!name) {
+            return;
+        }
+
+        fetch(`/save_highscore/${quizNumber}/`, { // Include the quiz number in the fetch URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({ name, score }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Redirect to the high score page after successful save
+            window.location.href = data.redirect;
+        })
+        .catch(error => {
+            console.error('Error saving high score:', error);
+        });
+    }
+
+</script>
+

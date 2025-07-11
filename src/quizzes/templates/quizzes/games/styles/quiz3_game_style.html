@@ -1,0 +1,184 @@
+<style>
+
+body {
+    background: #2980b9;  
+    background: -webkit-linear-gradient(to right, #2c3e50, #2980b9); 
+    background: linear-gradient(to right, #2c3e50, #2980b9); 
+}
+
+
+.choice-container {
+    display: flex;
+    margin-bottom: 1rem;
+    width: 100%;
+    border-radius: 4px;
+    background: #457fca;
+    background: -webkit-linear-gradient(to right, #5691c8, #457fca);
+    background: linear-gradient(to right, #5691c8, #457fca); 
+    font-size: 3rem;
+    min-width: 80rem;
+}
+
+.choice-container:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 rgb(116, 193, 255);
+    transform: scale(1.02);
+    transform: transform 100ms;
+}
+
+.choice-prefix {
+    user-select: none;
+    padding: 2rem 2.5rem;
+    color: black;
+}
+
+.choice-text {
+    user-select: none;
+    padding: 2rem;
+    width: 100%;
+    color: white;
+}
+
+.correct {
+    background: linear-gradient(32deg, rgba(11, 223, 36, 0.582) 0%, rgba(41, 232, 111, 0.753) 100%);
+}
+
+.incorrect {
+    background: linear-gradient(32deg, rgba(230, 29, 29, 0.568) 0%, rgba(224, 11, 11, 0.781) 100%);
+}
+
+#hud {
+    display: flex;
+    justify-content: space-between;
+}
+
+#question {
+    font-size: 3.5rem;
+    color: white;
+}
+
+.hud-prefix {
+    color: black;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.hud-main-text {
+    text-align: center;
+    color: black;
+}
+
+#progressBar {
+    width: 20rem;
+    height: 3rem;
+    border: 0.2rem solid rgb(41, 232, 111);
+    margin-top: 2rem;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+#progressBarFull {
+    height: 100%;
+    background: rgb(41, 232, 111);
+    width: 0%;
+}
+
+#timerBar {
+    width: 20rem;
+    height: 2rem;
+    border: 0.2rem solid rgb(255, 102, 102);
+    margin-top: 2rem;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+#timerBarFull {
+    height: 100%;
+    background: rgb(255, 102, 102);
+    width: 100%;
+    transition: width 1s linear;
+}
+
+@media screen and (max-width: 768px) {
+    .choice-container {
+        min-width: 2rem;
+    }
+
+    #game {
+        margin-top: 70px;
+    }
+
+    #question {
+        font-size: 3rem;
+    }
+
+    #hud {
+        margin-bottom: -10px;
+    }
+
+    #progressBar {
+        height: 2rem;
+        width: 15rem;
+    }
+
+    #timerBar {
+        height: 2rem;
+        width: 10rem;
+    }
+
+    .hud-prefix {
+        font-size: 1.8rem;
+    }
+
+    .hud-main-text {
+        font-size: 2.5rem;
+    }
+}
+
+@media (min-width: 800px) and (max-width: 1000px) {
+    .choice-container {
+        min-width: 2rem;
+    }
+
+    #game {
+        margin-top: 70px;
+    }
+
+    #question {
+        font-size: 4rem;
+    }
+
+    #hud {
+        gap: 100px;
+        margin-bottom: 20px;
+    }
+
+    #progressBar {
+        height: 4rem;
+        width: 20rem;
+    }
+
+    #timerBar {
+        height: 3rem;
+        width: 20rem;
+    }
+
+    .hud-prefix {
+        font-size: 3rem;
+    }
+
+    .hud-main-text {
+        font-size: 5rem;
+    }
+
+    .choice-prefix {
+        font-size: 2.5rem;
+    }
+
+    .choice-text {
+        font-size: 2.5rem;
+    }
+}
+
+
+</style>

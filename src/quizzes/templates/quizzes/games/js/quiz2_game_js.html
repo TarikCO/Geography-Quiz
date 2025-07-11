@@ -1,0 +1,300 @@
+{% load static %}
+<script>
+
+    const question = document.querySelector('#question');
+    const choices = Array.from(document.querySelectorAll('.choice-text'));
+    const progressText = document.querySelector('#progressText');
+    const scoreText = document.querySelector('#score');
+    const progressBarFull = document.querySelector('#progressBarFull');
+    const timerBarFull = document.querySelector('#timerBarFull');
+
+    let currentQuestion = {}
+    let acceptingAnswers = true
+    let score = 0
+    let questionCounter = 0
+    let availableQuestions = []
+    let timerInterval;
+    
+    let questions = [
+        {
+            question: '{% static "quiz2/questions/India.PNG" %}',
+            choice1: 'India',
+            choice2: 'Myanmar',
+            choice3: 'Maldives',
+            choice4: 'Bangladesh',
+            answer: 1,
+        },
+        {
+            question: '{% static "quiz2/questions/Colombia.PNG" %}',
+            choice1: "Myanmar",
+            choice2: "Colombia",
+            choice3: "Bolivia",
+            choice4: "Uganda",
+            answer: 2,
+        },
+        {
+            question: '{% static "quiz2/questions/Azerbaijan.PNG" %}',
+            choice1: "Turkmenistan",
+            choice2: "Belgium",
+            choice3: "Azerbaijan",
+            choice4: "Central African Republic",
+            answer: 3,
+        },
+        {
+            question: '{% static "quiz2/questions/Belarus.PNG" %}',
+            choice1: "Ivory Coast",
+            choice2: "Eswatini",
+            choice3: "Gabon",
+            choice4: "Belarus",
+            answer: 4,
+        },
+        {
+            question: '{% static "quiz2/questions/Burundi.PNG" %}',
+            choice1: "Djibouti",
+            choice2: "San Marino",
+            choice3: "Afghanistan",
+            choice4: "Burundi",
+            answer: 4,
+        },
+        {
+            question: '{% static "quiz2/questions/El Salvador.PNG" %}',
+            choice1: "Nepal",
+            choice2: "Latvia",
+            choice3: "El Salvador",
+            choice4: "Slovakia",
+            answer: 3,
+        },
+        {
+            question: '{% static "quiz2/questions/Fiji.PNG" %}',
+            choice1: "Palau",
+            choice2: "Fiji",
+            choice3: "St. Vincent and the Grenadines",
+            choice4: "Seychelles",
+            answer: 2,
+        },
+        {
+            question: '{% static "quiz2/questions/Gabon.PNG" %}',
+            choice1: "Gabon",
+            choice2: "Angola",
+            choice3: "Suriname",
+            choice4: "Botswana",
+            answer: 1,
+        },
+        {
+            question: '{% static "quiz2/questions/Guatemala.PNG" %}',
+            choice1: "Namibia",
+            choice2: "Mauritania",
+            choice3: "Guatemala",
+            choice4: "Tanzania",
+            answer: 3,
+        },
+        {
+            question: '{% static "quiz2/questions/Guinea-Bissau.PNG" %}',
+            choice1: "Papua New Guinea",
+            choice2: "Guinea-Bissau",
+            choice3: "Estonia",
+            choice4: "Denmark",
+            answer: 2,
+        },
+        {
+            question: '{% static "quiz2/questions/Laos.PNG" %}',
+            choice1: "Laos",
+            choice2: "Eritrea",
+            choice3: "Mozambique",
+            choice4: "Thailand",
+            answer: 1,
+        },
+        {
+            question: '{% static "quiz2/questions/Lesotho.PNG" %}',
+            choice1: "Lithuania",
+            choice2: "Andorra",
+            choice3: "Sierra Leone",
+            choice4: "Lesotho",
+            answer: 4,
+        },
+        {
+            question: '{% static "quiz2/questions/Luxembourg.PNG" %}',
+            choice1: "Barbados",
+            choice2: "Luxembourg",
+            choice3: "Armenia",
+            choice4: "Moldova",
+            answer: 2,
+        },
+        {
+            question: '{% static "quiz2/questions/Qatar.PNG" %}',
+            choice1: "Belize",
+            choice2: "Taiwan",
+            choice3: "Sri Lanka",
+            choice4: "Qatar",
+            answer: 4,
+        },
+        {
+            question: '{% static "quiz2/questions/Saint Lucia.PNG" %}',
+            choice1: "Saint Lucia",
+            choice2: "Magagascar",
+            choice3: "Guyana",
+            choice4: "Nauru",
+            answer: 1,
+        },
+        {
+            question: '{% static "quiz2/questions/Samoa.PNG" %}',
+            choice1: "Sao Tome and Principe",
+            choice2: "Grenada",
+            choice3: "Samoa",
+            choice4: "Antigua and Barbuda",
+            answer: 3,
+        },
+        {
+            question: '{% static "quiz2/questions/Singapore.PNG" %}',
+            choice1: "Singapore",
+            choice2: "Iraq",
+            choice3: "Guinea",
+            choice4: "Kuwait",
+            answer: 1,
+        },
+        {
+            question: '{% static "quiz2/questions/Solomon Islands.PNG" %}',
+            choice1: "Vanuatu",
+            choice2: "Grenada",
+            choice3: "Solomon Islands",
+            choice4: "Tuvalu",
+            answer: 3,
+        },
+        {
+            question: '{% static "quiz2/questions/South Sudan.PNG" %}',
+            choice1: "Slovenia",
+            choice2: "Bulgaria",
+            choice3: "Liberia",
+            choice4: "South Sudan",
+            answer: 4,
+        },
+        {
+            question: '{% static "quiz2/questions/Uruguay.PNG" %}',
+            choice1: "Kenya",
+            choice2: "Uruguay",
+            choice3: "Cambodia",
+            choice4: "Zimbabwe",
+            answer: 2,
+        },
+    ]
+    
+//Creation of constants for the quiz logic
+const SCORE_POINTS = 100
+const MAX_QUESTIONS = 20
+const TOTAL_TIME_PER_QUESTION = 15;
+    
+startGame = () => {
+    questionCounter = 0
+    score = 0
+    availableQuestions = [...questions]
+    getNewQuestion()
+}
+
+function startTimer() {
+    let timeLeft = TOTAL_TIME_PER_QUESTION;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        const timePercent = (timeLeft / TOTAL_TIME_PER_QUESTION) * 100;
+        timerBarFull.style.width = `${timePercent}%`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleTimeUp();
+        }
+    }, 1000); // 1000ms = 1 second
+}
+    
+getNewQuestion = () => {
+    if (questionCounter >= MAX_QUESTIONS) {
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz2_end');
+    }
+
+    questionCounter++;
+    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`;
+    progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+
+    if (availableQuestions.length === 0) {
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz2_end');
+    }
+
+    const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionsIndex];
+    const questionImage = document.getElementById('question-image');
+    questionImage.src = currentQuestion.question;
+
+    choices.forEach(choice => {
+        const number = choice.dataset['number'];
+        choice.innerText = currentQuestion['choice' + number];
+    });
+
+    availableQuestions.splice(questionsIndex, 1);
+
+    choices.forEach((choice) => {
+        choice.removeEventListener('click', handleChoiceClick);
+    });
+
+    acceptingAnswers = true;
+
+    choices.forEach((choice) => {
+        choice.addEventListener('click', handleChoiceClick);
+    });
+
+    clearInterval(timerInterval);
+
+    // Reset the timer for each new question
+    resetTimer();
+
+    // Start the timer for the current question
+    startTimer();
+
+};
+
+function resetTimer() {
+        timerBarFull.style.width = '100%';
+    }
+
+function handleTimeUp() {
+    acceptingAnswers = false;
+
+    setTimeout(() => {
+        getNewQuestion();
+    }, 1500); // Delay of 1.5 seconds before loading the next question
+}
+
+function handleChoiceSelection(selectedChoice, selectedAnswer) {
+    if (!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        clearInterval(timerInterval); 
+
+        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+
+        if (classToApply === 'correct') {
+            incrementScore(SCORE_POINTS);
+        }
+
+        selectedChoice.parentElement.classList.add(classToApply);
+
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
+        }, 1000);
+    }
+
+function handleChoiceClick(event) {
+    const selectedChoice = event.target;
+    const selectedAnswer = selectedChoice.dataset['number'];
+    handleChoiceSelection(selectedChoice, selectedAnswer);
+}
+
+incrementScore = num => {
+    score +=num
+    scoreText.innerText = score
+}
+
+startGame()
+
+</script>

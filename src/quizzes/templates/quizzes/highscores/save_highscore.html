@@ -1,0 +1,9 @@
+
+<h1>Leaderboard</h1>
+<ul>
+    {% for score in high_scores %}
+        <li class="high-score">{{ score.name }} - {{ score.score }}</li>
+    {% endfor %}
+</ul>
+<a href="/quiz1/" class="btn">Back to Quiz</a>
+<a href="/" class="btn">Go Home<i class="fas fa-home"></i></a>

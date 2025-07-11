@@ -1,0 +1,298 @@
+<script>
+    const question = document.querySelector('#question');
+    const choices = Array.from(document.querySelectorAll('.choice-text'));
+    const progressText = document.querySelector('#progressText');
+    const scoreText = document.querySelector('#score');
+    const progressBarFull = document.querySelector('#progressBarFull');
+    const timerBarFull = document.querySelector('#timerBarFull');
+
+    let currentQuestion = {}
+    let acceptingAnswers = true
+    let score = 0
+    let questionCounter = 0
+    let availableQuestions = []
+    let timerInterval;
+
+let questions = [
+{
+        question: 'What is the highest peak in Africa?',
+        choice1: 'Mount Kilimanjaro',
+        choice2: 'Mount Kenya',
+        choice3: 'Kibo (Uhuru Pk)',
+        choice4: 'Mawenzi',
+        answer: 1,
+    },
+    {
+        question: 'Which river is the longest in Asia?',
+        choice1: 'Mekong River',
+        choice2: 'Ganges River',
+        choice3: 'Yangtze River',
+        choice4: 'Yellow River',
+        answer: 3,
+    },
+    {
+        question: 'What is the only country in the world to have a coastline on both the Red Sea and the Persian Gulf?',
+        choice1: 'Saudi Arabia',
+        choice2: 'Oman',
+        choice3: 'Qatar',
+        choice4: 'United Arab Emirates',
+        answer: 1,
+    },
+    {
+        question: 'What is the largest island in the Mediterranean Sea?',
+        choice1: 'Sardinia',
+        choice2: 'Cyprus',
+        choice3: 'Sicily',
+        choice4: 'Crete',
+        answer: 3,
+    },
+    {
+        question: 'Which two countries share the longest international border in the world?',
+        choice1: 'United States and Canada',
+        choice2: 'Russia and China',
+        choice3: 'Argentina and Chile',
+        choice4: 'India and Bangladesh',
+        answer: 1,
+    },
+    {
+        question: 'Which country has the most time zones?',
+        choice1: 'United States',
+        choice2: 'Russia',
+        choice3: 'China',
+        choice4: 'Australia',
+        answer: 2,
+    },
+    {
+        question: 'What is the name of the largest salt flat in the world, located in Bolivia?',
+        choice1: 'Salar de Uyuni',
+        choice2: 'Badwater Basin',
+        choice3: 'Bonneville Salt Flats',
+        choice4: 'Atacama Salt Flat',
+        answer: 1,
+    },
+    {
+        question: 'What is the name of the highest waterfall in the world?',
+        choice1: 'Iguazu Falls',
+        choice2: 'Niagara Falls',
+        choice3: 'Angel Falls',
+        choice4: 'Victoria Falls',
+        answer: 3,
+    },
+    {
+        question: 'What is the name of the worlds largest cave system?',
+        choice1: 'Mammoth Cave',
+        choice2: 'Son Doong Cave',
+        choice3: 'Cave of the Crystals',
+        choice4: 'Sistema Sac Actun',
+        answer: 1,
+    },
+    {
+        question: 'What is the name of the only active volcano on the European continent?',
+        choice1: 'Mount Vesuvius',
+        choice2: 'Mount Etna',
+        choice3: 'Mount Stromboli',
+        choice4: 'Mount Elbrus',
+        answer: 2,
+    },
+    {
+        question: 'What is the name of the largest glacier in the world, located in Antarctica?',
+        choice1: 'Pasterze Glacier',
+        choice2: 'Fox Glacier',
+        choice3: 'Aletsch Glacier',
+        choice4: 'Lambert Glacier',
+        answer: 4,
+    },
+    {
+        question: 'What is the capital city of the worlds only country to have a non-rectangular flag?',
+        choice1: 'Bern',
+        choice2: 'Bandar Seri Begawan',
+        choice3: 'Kathmandu',
+        choice4: 'Valletta',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital city of the worlds only country to have a coastline on the Indian Ocean and the Pacific Ocean?',
+        choice1: 'Jakarta',
+        choice2: 'Nairobi',
+        choice3: 'Lima',
+        choice4: 'Canberra',
+        answer: 1,
+    },
+    {
+        question: 'UNESCO protects the worlds most important sites. How many World Heritage Sites have they inscribed?',
+        choice1: '628',
+        choice2: '1,121',
+        choice3: '912',
+        choice4: '2,347',
+        answer: 2,
+    },
+    {
+        question: 'In which Asian country would you find the largest Buddhist temple in the world?',
+        choice1: 'India',
+        choice2: 'China',
+        choice3: 'Thailand',
+        choice4: 'Indonesia',
+        answer: 4,
+    },
+    {
+        question: 'In which Middle Eastern country would you find the ancient city of Palmyra, which was once a trading hub for the Roman Empire?',
+        choice1: 'Iraq',
+        choice2: 'Syria',
+        choice3: 'Lebanon',
+        choice4: 'Jordan',
+        answer: 2,
+    },
+    {
+        question: 'Which Asian country is home to the historic city of Samarkand?',
+        choice1: 'Kazakhstan',
+        choice2: 'Uzbekistan',
+        choice3: 'Turkmenistan',
+        choice4: 'Tajikistan',
+        answer: 2,
+    },
+    {
+        question: 'In which African country would you find the historic city of Timbuktu, a center of Islamic scholarship and trading in the Middle Ages?',
+        choice1: 'Mali',
+        choice2: 'Nigeria',
+        choice3: 'Algeria',
+        choice4: 'Egypt',
+        answer: 1,
+    },
+    {
+        question: 'Which European country is home to the ancient city of Ephesus, a center of Hellenistic and Roman culture?',
+        choice1: 'Greece',
+        choice2: 'Italy',
+        choice3: 'Turkey',
+        choice4: 'Spain',
+        answer: 3,
+    },
+    {
+        question: 'In which North American country would you find the UNESCO World Heritage Site of Tikal?',
+        choice1: 'Mexico',
+        choice2: 'Honduras',
+        choice3: 'Belize',
+        choice4: 'Guatemala',
+        answer: 4,
+    }
+]
+
+//Creation of constants for the quiz logic
+const SCORE_POINTS = 100
+const MAX_QUESTIONS = 20
+
+const TOTAL_TIME_PER_QUESTION = 15;
+
+//Function that starts the quiz
+startGame = () => {
+    questionCounter = 0
+    score = 0
+    availableQuestions = [...questions]
+    getNewQuestion()
+}
+
+function startTimer() {
+        let timeLeft = TOTAL_TIME_PER_QUESTION;
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            const timePercent = (timeLeft / TOTAL_TIME_PER_QUESTION) * 100;
+            timerBarFull.style.width = `${timePercent}%`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleTimeUp();
+            }
+        }, 1000); // 1000ms = 1 second
+    }
+
+//Function that generates a new question
+getNewQuestion = () => {
+    if (questionCounter >= MAX_QUESTIONS) {
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz1_end');
+    }
+
+    questionCounter++;
+    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`;
+    progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+
+    if (availableQuestions.length === 0) {
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz1_end');
+    }
+
+    const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionsIndex];
+    question.innerText = currentQuestion.question;
+
+    choices.forEach((choice) => {
+        const number = choice.dataset['number'];
+        choice.innerText = currentQuestion['choice' + number];
+    });
+
+    availableQuestions.splice(questionsIndex, 1);
+
+    choices.forEach((choice) => {
+        choice.removeEventListener('click', handleChoiceClick);
+    });
+
+    acceptingAnswers = true;
+
+    choices.forEach((choice) => {
+        choice.addEventListener('click', handleChoiceClick);
+    });
+
+    clearInterval(timerInterval);
+
+    resetTimer();
+
+    startTimer();
+};
+
+
+function resetTimer() {
+        timerBarFull.style.width = '100%';
+    }
+
+function handleTimeUp() {
+    acceptingAnswers = false;
+
+    setTimeout(() => {
+        getNewQuestion();
+    }, 1500);
+}
+
+function handleChoiceSelection(selectedChoice, selectedAnswer) {
+    if (!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        clearInterval(timerInterval); 
+
+        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+
+        if (classToApply === 'correct') {
+            incrementScore(SCORE_POINTS);
+        }
+
+        selectedChoice.parentElement.classList.add(classToApply);
+
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
+        }, 1000);
+    }
+
+function handleChoiceClick(event) {
+    const selectedChoice = event.target;
+    const selectedAnswer = selectedChoice.dataset['number'];
+    handleChoiceSelection(selectedChoice, selectedAnswer);
+}
+
+incrementScore = num => {
+    score +=num
+    scoreText.innerText = score
+}
+
+startGame()
+
+</script>

@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'cool earth.jpg' %}">
+    
+    <!-- Include content in the header file (which has the navigation bar)
+        as well as its styling and the content from the main style page. -->
+    {% include 'sections/headerstyle.html' %}
+    {% include 'sections/header.html' %}
+    {% include 'sections/basestyle.html' %}
+    {% include 'sections/homestyle.html' %}
+
+</head>
+<body>
+
+    <section class="main_content">
+        {% block main_content %}
+
+        {% endblock main_content %}
+    </section>
+
+
+    <section id="quiz1" class="quiz1_content">
+        {% block quiz1_content %}
+
+        {% endblock quiz1_content %}
+    </section>
+
+
+    <section id="quiz2" class="quiz2_content">
+        {% block quiz2_content %}
+
+        {% endblock quiz2_content %}
+    </section>
+
+
+    <section id="quiz3" class="quiz3_content">
+        {% block quiz3_content %}
+
+        {% endblock quiz3_content %}
+    </section>
+
+
+    <div class="footer">
+        <p>I Hope You Enjoy The Quizzes!</p>
+    </div>
+
+</body>
+</html>

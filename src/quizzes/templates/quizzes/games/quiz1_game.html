@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    {% include 'quizzes/header_style_quizzes.html' %}
+    {% include 'quizzes/games/styles/quiz1_game_style.html' %}
+    {% include 'quizzes/games/styles/mainstyles/quiz1_game_mainstyle.html' %}
+</head>
+<body>
+    
+    <nav class="main-navbar">
+        <a href="{% url 'home' %}" id="logo">Home</a>
+        {% if request.resolver_match.url_name == 'home' %}
+            <a href="#quiz1">Quiz 1</a>
+            <a href="#quiz2">Quiz 2</a>
+            <a href="#quiz3">Quiz 3</a>
+        {% else %}
+            <a href="{% url 'quiz1' %}">Quiz 1</a>
+            <a href="{% url 'quiz2' %}">Quiz 2</a>
+            <a href="{% url 'quiz3' %}">Quiz 3</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <nav class="account-navbar">
+                <a href="{% url 'account' %}">Account</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        {% else %}
+            <nav class="account-navbar">
+                <a href="{% url 'register' %}">Register</a>
+                <a href="{% url 'login' %}">Login</a>
+            </nav>
+        {% endif %}
+    </nav>
+
+
+<!-- Structure of the Quiz itself -->
+<div class="container">
+    <div id="game" class="justify-center flex-column">
+        <div id="hud">
+            <div class="hud-item">
+                <p id="progressText" class="hud-prefix">
+                    Question
+                </p>
+                <div id="progressBar">
+                    <div id="progressBarFull"></div>
+                </div>
+            </div>
+            <div class="hud-item">
+                <p class="hud-prefix">
+                    Score
+                </p>
+                <h1 class="hud-main-text" id="score">
+                    0
+                </h1>
+            </div>
+            <div class="hud-item">
+                <p class="hud-prefix">
+                    Time Left
+                </p>
+                <div id="timerBar">
+                    <div id="timerBarFull"></div>
+                </div>
+            </div>
+        </div>
+        <h1 id="question">What is the answer to this question</h1>
+        <div class="choice-container">
+            <p class="choice-prefix">A</p>
+            <p class="choice-text" data-number="1">Choice</p>
+        </div>
+        <div class="choice-container">
+            <p class="choice-prefix">B</p>
+            <p class="choice-text" data-number="2">Choice 2</p>
+        </div>
+        <div class="choice-container">
+            <p class="choice-prefix">C</p>
+            <p class="choice-text" data-number="3">Choice 3</p>
+        </div>
+        <div class="choice-container">
+            <p class="choice-prefix">D</p>
+            <p class="choice-text" data-number="4">Choice 4</p>
+        </div>
+    </div>
+</div>
+
+<!-- Reference for the JS logic of the Quiz -->
+{% include 'quizzes/games/js/quiz1_game_js.html' %}
+</body>
+</html>

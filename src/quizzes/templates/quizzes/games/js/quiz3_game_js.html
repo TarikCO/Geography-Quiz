@@ -1,0 +1,303 @@
+<script>
+
+    const question = document.querySelector('#question');
+    const choices = Array.from(document.querySelectorAll('.choice-text'));
+    const progressText = document.querySelector('#progressText');
+    const scoreText = document.querySelector('#score');
+    const progressBarFull = document.querySelector('#progressBarFull');
+    const timerBarFull = document.querySelector('#timerBarFull');
+
+    let currentQuestion = {}
+    let acceptingAnswers = true
+    let score = 0
+    let questionCounter = 0
+    let availableQuestions = []
+    let timerInterval;
+    
+let questions = [
+    {
+        question: 'What is the capital of Lesotho?',
+        choice1: 'Maseru',
+        choice2: 'Lilongwe',
+        choice3: 'Maputo',
+        choice4: 'Libreville',
+        answer: 1,
+    },
+    {
+        question: 'What is the capital of Brunei?',
+        choice1: 'Phnom Penh',
+        choice2: 'Bandar Seri Begawan',
+        choice3: 'Vientiane',
+        choice4: 'Dili',
+        answer: 2,
+    },
+    {
+        question: 'What is the capital of Papua New Guinea?',
+        choice1: 'Noumea',
+        choice2: 'Suva',
+        choice3: 'Port Moresby',
+        choice4: 'Apia',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital of Tuvalu?',
+        choice1: 'Nuku/alofa',
+        choice2: 'Honiara',
+        choice3: 'Tarawa',
+        choice4: 'Funafuti',
+        answer: 4,
+    },
+    {
+        question: 'What is the capital of Suriname?',
+        choice1: 'Castries',
+        choice2: 'Georgetown',
+        choice3: 'Bridgetown',
+        choice4: 'Paramaribo',
+        answer: 4,
+    },
+    {
+        question: 'What is the capital of Mongolia?',
+        choice1: 'Dushanbe',
+        choice2: 'Astana',
+        choice3: 'Ulaanbaatar',
+        choice4: 'Bishkek',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital of Bhutan?',
+        choice1: 'Kathmandu',
+        choice2: 'Thimphu',
+        choice3: 'Dhaka',
+        choice4: 'Male',
+        answer: 2,
+    },
+    {
+        question: 'What is the capital of Kyrgyzstan?',
+        choice1: 'Bishkek',
+        choice2: 'Tashkent',
+        choice3: 'Ashgabat',
+        choice4: 'Nur-Sultan',
+        answer: 1,
+    },
+    {
+        question: 'What is the capital of Malawi?',
+        choice1: 'Harare',
+        choice2: 'Lilongwe',
+        choice3: 'Luanda',
+        choice4: 'Gaborone',
+        answer: 2,
+    },
+    {
+        question: 'What is the capital of Turkmenistan?',
+        choice1: 'Baku',
+        choice2: 'Dushanbe',
+        choice3: 'Tashkent',
+        choice4: 'Ashgabat',
+        answer: 4,
+    },
+    {
+        question: 'What is the capital of Comoros?',
+        choice1: 'Moroni',
+        choice2: 'Antananarivo',
+        choice3: 'Victoria',
+        choice4: 'Saint-Denis',
+        answer: 1,
+    },
+    {
+        question: 'What is the capital of East Timor?',
+        choice1: 'Palikir',
+        choice2: 'Suva',
+        choice3: 'Dili',
+        choice4: 'Honiara',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital of Eritrea?',
+        choice1: 'Asmara',
+        choice2: 'Addis Ababa',
+        choice3: 'Mogadishu',
+        choice4: 'Khartoum',
+        answer: 1,
+    },
+    {
+        question: 'What is the capital of Mauritania?',
+        choice1: 'Bamako',
+        choice2: 'Nouakchott',
+        choice3: 'Niamey',
+        choice4: 'Ouagadougou',
+        answer: 2,
+    },
+    {
+        question: 'What is the capital of Laos?',
+        choice1: 'Bangkok',
+        choice2: 'Phnom Penh',
+        choice3: 'Vientiane',
+        choice4: 'Jakarta',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital of Solomon Islands?',
+        choice1: 'Funafuti',
+        choice2: 'Port Moresby',
+        choice3: 'Apia',
+        choice4: 'Honiara',
+        answer: 4,
+    },
+    {
+        question: 'What is the capital of Sierra Leone?',
+        choice1: 'Lome',
+        choice2: 'Accra',
+        choice3: 'Freetown',
+        choice4: 'Conakry',
+        answer: 3,
+    },
+    {
+        question: 'What is the capital of Niger?',
+        choice1: 'Bamako',
+        choice2: 'Niamey',
+        choice3: 'Dakar',
+        choice4: 'Ouagadougou',
+        answer: 2,
+    },
+    {
+        question: 'What is the capital of Guinea?',
+        choice1: 'Conakry',
+        choice2: 'Abuja',
+        choice3: 'Dakar',
+        choice4: 'Nouakchott',
+        answer: 1,
+    },
+    {
+        question: 'What is the capital of Rwanda?',
+        choice1: 'Dodoma',
+        choice2: 'Kampala',
+        choice3: 'Bujumbura',
+        choice4: 'Kigali',
+        answer: 4,
+    }
+]
+
+//Creation of constants for the quiz logic
+const SCORE_POINTS = 100
+const MAX_QUESTIONS = 20
+const TOTAL_TIME_PER_QUESTION = 15;
+
+//Function that starts the quiz
+startGame = () => {
+    questionCounter = 0
+    score = 0
+    availableQuestions = [...questions]
+    getNewQuestion()
+}
+
+function startTimer() {
+    let timeLeft = TOTAL_TIME_PER_QUESTION;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        const timePercent = (timeLeft / TOTAL_TIME_PER_QUESTION) * 100;
+        timerBarFull.style.width = `${timePercent}%`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            handleTimeUp();
+        }
+    }, 1000); // 1000ms = 1 second
+}
+
+//Function that generates a new question
+getNewQuestion = () => {
+    if (questionCounter >= MAX_QUESTIONS) {
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz3_end');
+    }
+
+    questionCounter++;
+    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`;
+    progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+
+    if (availableQuestions.length === 0) {
+        // If there are no more questions in the availableQuestions array,
+        // it means the user has already answered all questions
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('/quiz3_end');
+    }
+
+    const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionsIndex];
+    question.innerText = currentQuestion.question;
+
+    choices.forEach((choice) => {
+        const number = choice.dataset['number'];
+        choice.innerText = currentQuestion['choice' + number];
+    });
+
+    availableQuestions.splice(questionsIndex, 1);
+
+    choices.forEach((choice) => {
+        choice.removeEventListener('click', handleChoiceClick);
+    });
+
+    acceptingAnswers = true;
+
+    choices.forEach((choice) => {
+        choice.addEventListener('click', handleChoiceClick);
+    });
+
+    clearInterval(timerInterval);
+
+    // Reset the timer for each new question
+    resetTimer();
+
+    // Start the timer for the current question
+    startTimer();
+};
+
+
+function resetTimer() {
+        timerBarFull.style.width = '100%';
+    }
+
+function handleTimeUp() {
+    acceptingAnswers = false;
+
+    setTimeout(() => {
+        getNewQuestion();
+    }, 1500); // Delay of 1.5 seconds before loading the next question
+}
+
+function handleChoiceSelection(selectedChoice, selectedAnswer) {
+    if (!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        clearInterval(timerInterval); 
+
+        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+
+        if (classToApply === 'correct') {
+            incrementScore(SCORE_POINTS);
+        }
+
+        selectedChoice.parentElement.classList.add(classToApply);
+
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
+        }, 1000);
+    }
+
+
+function handleChoiceClick(event) {
+    const selectedChoice = event.target;
+    const selectedAnswer = selectedChoice.dataset['number'];
+    handleChoiceSelection(selectedChoice, selectedAnswer);
+}
+
+incrementScore = num => {
+    score +=num
+    scoreText.innerText = score
+}
+
+startGame()
+
+</script>

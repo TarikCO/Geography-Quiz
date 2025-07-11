@@ -1,0 +1,73 @@
+{% include 'account/styles/registerstyle.html' %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<nav class="main-navbar">
+    <a href="{% url 'home' %}" id="logo">Home</a>
+    {% if request.resolver_match.url_name == 'home' %}
+        <a href="#quiz1">Quiz 1</a>
+        <a href="#quiz2">Quiz 2</a>
+        <a href="#quiz3">Quiz 3</a>
+    {% else %}
+        <a href="{% url 'quiz1' %}">Quiz 1</a>
+        <a href="{% url 'quiz2' %}">Quiz 2</a>
+        <a href="{% url 'quiz3' %}">Quiz 3</a>
+    {% endif %}
+    {% if request.user.is_authenticated %}
+        <nav class="account-navbar">
+            <a href="{% url 'account' %}">Account</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    {% else %}
+        <nav class="account-navbar">
+            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'login' %}">Login</a>
+        </nav>
+    {% endif %}
+</nav>
+
+<!-- HTML content for the Registration URL/Page -->
+<div class="register_content">
+    <div class="form">
+        <div class="container">
+            <h2 class="title">Register</h2>
+
+            <form method="post">
+            
+                {% csrf_token %}
+                
+                <div class="form_label"><label for="email">Email:</label></div>
+                <div class="form_input"><input type="email" name="email" id="id_email" required autofocus></div>
+
+                <div class="form_label"><label for="username">Username:</label></div>
+                <div class="form_input"><input type="text" name="username" id="id_username" required></div>
+
+                <div class="form_label"><label for="password1">Password:</label></div>
+                <div class="form_input"><input type="password" name="password1" id="id_password1" required></div>
+
+                <div class="form_label"><label for="password2">Confirm Password:</label></div>
+                <div class="form_input"><input type="password" name="password2"id="id_password2" required></div>
+
+                {% for field in registration_form %}
+                    <p>
+                        {% for error in field.errors %}
+                            <p style="color: red;">{{error}}</p>
+                        {% endfor %}
+                    </p>
+                {% endfor %}
+                
+                {% if registration_form.non_field_errors %}
+                    <div>
+                        <p style="color: red;">{{registration_form.non_field_errors}}</p>
+                    </div>
+                {% endif %}
+
+                <button class="register_button" type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>I Hope You Enjoy the Quizzes!</p>
+</div>   
+    

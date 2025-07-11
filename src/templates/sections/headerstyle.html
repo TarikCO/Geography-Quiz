@@ -1,0 +1,143 @@
+{% load static %}
+<style>
+
+/* Import of external font */
+@font-face {
+    font-family: "EasterDiscover";
+    src: url("{% static 'Easter Discover.ttf' %}");
+}
+
+@font-face {
+    font-family: "Anurati";
+    src: url("{% static 'Anurati-Regular.otf' %}");
+}
+
+    
+/* Main Navigation Bar and its items styling */
+.main-navbar {
+    display: flex;
+    height: 80px;
+    overflow: hidden;
+    align-items: center;
+    position: fixed;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 100;
+}
+
+.main-navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 23px;
+    padding: 10px 60px;
+    position: relative;
+}
+
+.main-navbar a:after {
+    content: "";
+    color: black;
+    bottom: 0;
+    height: 1.5px;
+    left: 50%;
+    position: absolute;
+    background: white;
+    transition: width 0.25s ease 0s, left 0.25s ease 0s;
+    width: 0;
+}
+
+.main-navbar a:hover:after { 
+    width: 100%; 
+    left: 0; 
+}
+
+
+/* Account Navigation Bar and its items styling */
+.account-navbar {
+    margin-left: auto;
+    display: flex;
+    height: 80px;
+    overflow: hidden;
+    align-items: center;
+}
+
+.account-navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 23px;
+    padding: 10px 60px;
+    position: relative;
+}
+
+.account-navbar a:after {
+    content: "";
+    color: black;;
+    bottom: 0;
+    height: 1.5px;
+    left: 50%;
+    position: absolute;
+    background: white;;
+    transition: width 0.25s ease 0s, left 0.25s ease 0s;
+    width: 0;
+}
+
+#logo {
+    font-size: 40px;
+    font-family: "EasterDiscover"; 
+}
+
+@media (max-width: 768px) {
+    .main-navbar {
+        justify-content: flex-start; 
+        height: auto;
+        padding-bottom: 10px; 
+    }
+
+    .main-navbar a,
+    .account-navbar a {
+        padding: 5px 10px; 
+        font-size: 15px; 
+    }
+
+    #logo {
+        font-size: 30px;
+    }
+
+    .account-navbar {
+        margin-left: 10px;
+    }
+
+    .account-navbar a:nth-child(1) { order: 1; }
+    .account-navbar a:nth-child(2) { order: 2; }
+}
+
+@media (min-width: 800px) and (max-width: 1000px) {
+    .main-navbar {
+        justify-content: flex-start; 
+        height: auto;
+        padding-bottom: 10px; 
+    }
+
+    .main-navbar a,
+    .account-navbar a {
+        padding: 5px 20px; 
+        font-size: 28px; 
+    }
+
+    #logo {
+        font-size: 40px;
+    }
+
+    .account-navbar {
+        margin-left: 100px;
+    }
+
+    .account-navbar a:nth-child(1) { order: 1; }
+    .account-navbar a:nth-child(2) { order: 2; }
+}
+
+</style>
+
+
+
+
+

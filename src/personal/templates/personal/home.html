@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- Content that appears in the very beggining of the website -->
+{% block main_content %}
+
+    <div class="stars">
+        <div id="stars"></div>
+    </div>
+
+    <div class="main-flex-container">
+        <br>
+        <h1 class="main-title">EXPLORE THE PLANET</h1>
+        <h2 class="main-subtitle">Test your geographical knowledge and uncover new horizons!</h2><br><br>
+        <a href="#quiz1"><button class="quiz_button">Take me to the Quizzes</button></a>
+    </div>
+
+{% endblock main_content %}
+
+
+
+<!-- Content for the introduction of the first quiz -->
+{% block quiz1_content %}
+
+  <div class="quiz1-container">
+    <div class="quiz1-left">
+      <h1 class="quiz1-title">General Knowledge Quiz  !</h1>
+      <p class="quiz1-description">This quiz will test your knowledge of geography in a variety of areas, 
+        from natural landmarks to historic monuments, capitals, and more. It won't just be about identifying flags or memorizing maps; 
+        instead, be prepared for a range of HARD questions that will put your general geographic knowledge to the test.</p>
+      <a href="{% url 'quiz1' %}"><button class="quiz1-btn">Let's Go!</button></a>
+    </div>
+    <div class="quiz1-right">
+        <img class="quiz1-img" id="quiz1-img-media" src="{% static 'quiz1/intro/mediterranean.jpg' %}" alt="mediterranean sea">
+        <img class="quiz1-img" style="margin-top: 50%;" src="{% static 'quiz1/intro/ephesus.jpg' %}" alt="ephesus">
+        <img class="quiz1-img" src="{% static 'quiz1/intro/peak.jpg' %}" alt="snow peak">
+    </div>
+  </div>
+
+{% endblock quiz1_content %}
+
+
+
+<!-- Content for the introduction of the second quiz -->
+{% block quiz2_content %}
+
+<div class="quiz2-container">
+    <div class="quiz2-left">
+        <img class="quiz2-img quiz2-img1" src="{% static 'quiz2/intro/spain.webp' %}" alt="spain">
+        <img class="quiz2-img quiz2-img2" src="{% static 'quiz2/intro/nigeria.png' %}" alt="nigeria"><br>
+        <img class="quiz2-img quiz2-img3" src="{% static 'quiz2/intro/kosovo.webp' %}" alt="kosovo">
+        <img class="quiz2-img quiz2-img4" src="{% static 'quiz2/intro/liechtenstein.webp' %}" alt="liechtenstein">
+    </div>
+    <div class="quiz2-right">
+        <h1 class="quiz2-title">Country Shapes  !</h1>
+        <p class="quiz2-description">This quiz will test your knowledge on country shapes. It gets harder the further you go, so prepare
+            yourself to identify difficult country shapes!</p>
+        <a href="{% url 'quiz2' %}"><button class="quiz2-btn">Take me!</button></a>
+    </div>
+  </div>
+
+{% endblock quiz2_content %}
+
+
+
+<!-- Content for the introduction of the third quiz -->
+{% block quiz3_content %}
+
+    <div class="quiz3-container">
+        <img class="quiz3-img quiz3-img1" src="{% static 'quiz3/intro/Eiffel.jpg' %}" alt="Eiffel Tower">
+        <div class="quiz3-center">
+            <h1 class="quiz3-title">Good Ol' Capitals Quiz</h1>
+            <p class="quiz3-description">This Quiz will test your knowledge of World Capitals. Do you think you can make it through? Or
+              you only know these two little capitals over here in the side?
+            </p>
+            <a href="{% url 'quiz3' %}"><button class="quiz3-btn">Let's see!</button></a>
+        </div>
+        <img class="quiz3-img quiz3-img2" src="{% static 'quiz3/intro/BigBen.jpg' %}" alt="BigBen Tower">
+  </div>
+
+{% endblock quiz3_content %}
+
+
+
+
+
+
+
+
+
+
+
+

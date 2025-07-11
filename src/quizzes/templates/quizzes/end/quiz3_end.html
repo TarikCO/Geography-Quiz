@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous">
+    {% include 'quizzes/header_style_quizzes.html' %}
+    {% include 'quizzes/end/styles/quiz3_end_style.html' %}
+</head>
+<body>
+
+    <nav class="main-navbar">
+        <a href="{% url 'home' %}" id="logo">Home</a>
+        {% if request.resolver_match.url_name == 'home' %}
+            <a href="#quiz1">Quiz 1</a>
+            <a href="#quiz2">Quiz 2</a>
+            <a href="#quiz3">Quiz 3</a>
+        {% else %}
+            <a href="{% url 'quiz1' %}">Quiz 1</a>
+            <a href="{% url 'quiz2' %}">Quiz 2</a>
+            <a href="{% url 'quiz3' %}">Quiz 3</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <nav class="account-navbar">
+                <a href="{% url 'account' %}">Account</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        {% else %}
+            <nav class="account-navbar">
+                <a href="{% url 'register' %}">Register</a>
+                <a href="{% url 'login' %}">Login</a>
+            </nav>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <div id="end" class="flex-center flex-column">
+            <h1 id="finalScore">0</h1>
+            <form class="end-form-container" id="scoreForm">
+                <h2 id="end-text">Enter your name below to save your score!</h2>
+                {% if user.is_authenticated %}
+                    <!-- If the user is logged in, display their username and disable the input -->
+                    <input type="text" name="name" id="username" value="{{ user.username }}" readonly>
+                {% else %}
+                    <!-- If the user is not logged in, let them input their name -->
+                    <input type="text" name="name" id="username" placeholder="Enter your name">
+                {% endif %}
+                <button id="saveScoreBtn" type="submit">Save</button>
+            </form>
+            <a href="{% url 'quiz3_game' %}" class="btn">Play Again</a>
+            <a href="/" class="btn">Go Home<i class="fas fa-home"></i></a>
+        </div>
+    </div>
+
+    {% include 'quizzes/end/js/quiz3_end_js.html' %}
+</body>
+</html>

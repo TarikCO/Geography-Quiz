@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Scores</title>
+    {% include 'quizzes/header_style_quizzes.html' %}
+    {% include 'quizzes/highscores/styles/quiz3_highscore_style.html' %}
+    {% include 'quizzes/highscores/styles/mainstyles/quiz3_highscore_mainstyle.html' %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q" crossorigin="anonymous">
+</head>
+<body>
+
+    <nav class="main-navbar">
+        <a href="{% url 'home' %}" id="logo">Home</a>
+        {% if request.resolver_match.url_name == 'home' %}
+            <a href="#quiz1">Quiz 1</a>
+            <a href="#quiz2">Quiz 2</a>
+            <a href="#quiz3">Quiz 3</a>
+        {% else %}
+            <a href="{% url 'quiz1' %}">Quiz 1</a>
+            <a href="{% url 'quiz2' %}">Quiz 2</a>
+            <a href="{% url 'quiz3' %}">Quiz 3</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <nav class="account-navbar">
+                <a href="{% url 'account' %}">Account</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        {% else %}
+            <nav class="account-navbar">
+                <a href="{% url 'register' %}">Register</a>
+                <a href="{% url 'login' %}">Login</a>
+            </nav>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        <div id="highScores" class="flex-center flex-column">
+            <h1 id="finalScore">Leaderboard</h1>
+            <ul id="highScoresList"></ul>
+            <a href="/quiz3/" class="btn">Back to Quiz</a>
+            <a href="/" class="btn">Go Home<i class="fas fa-home"></i></a>
+        </div>
+    </div>
+    
+    {% include 'quizzes/highscores/js/quiz3_highscore_js.html' %}
+</body>
+</html>
